@@ -2,15 +2,9 @@ from sqlite3 import Error
 from connect import create_connection, database
 
 
-def create_project(conn, project):
-    """
-    Create a new project into the projects table
-    :param conn:
-    :param project:
-    :return: project id
-    """
+def create_user(conn, project):
     sql = """
-    INSERT INTO projects(name,begin_date,end_date) VALUES(?,?,?);
+    INSERT INTO users(fullname,email) VALUES(?,?);
     """
     cur = conn.cursor()
     try:
@@ -24,16 +18,25 @@ def create_project(conn, project):
     return cur.lastrowid
 
 
-def create_task(conn, task):
-    """
-    Create a new task
-    :param conn:
-    :param task:
-    :return:
-    """
-
+def create_status(conn, task):
     sql = """
-    INSERT INTO tasks(name,priority,status,project_id,begin_date,end_date) VALUES(?,?,?,?,?,?);
+    INSERT INTO status(name) VALUES(?);
+    """
+    cur = conn.cursor()
+    try:
+        cur.execute(sql, task)
+        conn.commit()
+    except Error as e:
+        print(e)
+    finally:
+        cur.close()
+
+    return cur.lastrowid
+
+
+def create_task(conn, task):
+    sql = """
+    INSERT INTO tasks(title,description,status_id,user_id) VALUES(?,?,?,?);
     """
     cur = conn.cursor()
     try:
@@ -49,29 +52,35 @@ def create_task(conn, task):
 
 if __name__ == "__main__":
     with create_connection(database) as conn:
-        # create a new project
-        project = ("Cool App with SQLite & Python", "2022-01-01", "2022-01-30")
-        project_id = create_project(conn, project)
-        print(project_id)
+        # Statuses
+        status_new = ("new",)
+        status_progress = ("in progress",)
+        status_completed = ("completed",)
+        # create status
+        create_status(conn, status_new)
+        create_status(conn, status_progress)
+        create_status(conn, status_completed)
 
-        # tasks
-        task_1 = (
-            "Analyze the requirements of the app",
-            1,
-            True,
-            project_id,
-            "2022-01-01",
-            "2022-01-02",
-        )
-        task_2 = (
-            "Confirm with user about the top requirements",
-            1,
-            False,
-            project_id,
-            "2022-01-03",
-            "2022-01-05",
-        )
+        # Users
+        user1 = ("John Smit", "smith@gmail.com")
+        user2 = ("John Brown", "brown@gmail.com")
+        user3 = ("John Black", "black@gmail.com")
+        # create users
+        create_user(conn, user1)
+        create_user(conn, user2)
+        create_user(conn, user3)
 
-        # create tasks
-        print(create_task(conn, task_1))
-        print(create_task(conn, task_2))
+        # Task
+        task_1 = ("test1", "some desc", 1, 1)
+        task_2 = ("test2", "some desc", 2, 3)
+        task_3 = ("test3", "some desc", 2, 2)
+        task_4 = ("test4", "some desc", 3, 1)
+        task_5 = ("test5", "some desc", 1, 2)
+        # create task
+        create_task(conn, task_1)
+        create_task(conn, task_2)
+        create_task(conn, task_3)
+        create_task(conn, task_4)
+        create_task(conn, task_5)
+
+        print("all complete")
