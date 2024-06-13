@@ -15,4 +15,4 @@ with create_connection(database) as conn:
     insert_data(conn, SQL_USER, users)
     insert_data(conn, SQL_TASK, tasks)
 
-    print("all complete")
+    print("all data is filled in")

@@ -37,6 +37,7 @@ with create_connection(database) as conn:
         create_table(conn, sql_create_users_table)
         create_table(conn, sql_create_status_table)
         create_table(conn, sql_create_tasks_table)
+        print("all tables created")
 
     else:
         print("Error! cannot create the database connection.")
