@@ -1,15 +1,10 @@
 import faker
 from random import randint
 
-NUMBER_USERS = 5
-NUMBER_TASK = 20
-NUMBER_STATUS = 3
-
 
 def generate_fake_data(number_users=1, number_task=1, number_status=1) -> tuple():
     fake_users = []
     fake_tasks = []
-    status = [("new",), ("in progress",), ("completed",)]
 
     fake_data = faker.Faker()
 
@@ -26,9 +21,12 @@ def generate_fake_data(number_users=1, number_task=1, number_status=1) -> tuple(
             )
         )
 
-    return status, fake_users, fake_tasks
+    return fake_users, fake_tasks
 
 
 if __name__ == "__main__":
-    status, user, task = generate_fake_data(NUMBER_USERS, NUMBER_TASK, NUMBER_STATUS)
-    print(status, user, task, sep="\n")
+    NUMBER_USERS = 5
+    NUMBER_TASK = 20
+    NUMBER_STATUS = 3
+    user, task = generate_fake_data(NUMBER_USERS, NUMBER_TASK, NUMBER_STATUS)
+    print(user, task, sep="\n")

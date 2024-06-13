@@ -6,7 +6,8 @@ SQL_USER = "INSERT INTO users(fullname,email) VALUES(?,?);"
 SQL_STATUS = "INSERT INTO status(name) VALUES(?);"
 SQL_TASK = "INSERT INTO tasks(title,description,status_id,user_id) VALUES(?,?,?,?);"
 
-status, users, tasks = generate_fake_data(5, 10, 3)
+status = [("new",), ("in progress",), ("completed",)]
+users, tasks = generate_fake_data(5, 25, len(status))
 
 
 def insert_data(conn, sql, data):
@@ -19,7 +20,7 @@ def insert_data(conn, sql, data):
     finally:
         cur.close()
 
-    return "create"
+    return "ok"
 
 
 if __name__ == "__main__":
