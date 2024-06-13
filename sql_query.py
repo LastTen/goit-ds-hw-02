@@ -9,7 +9,7 @@ def create_table(conn, create_table_sql):
     """
     try:
         c = conn.cursor()
-        c.execute(create_table_sql)
+        c.executescript(create_table_sql)
         conn.commit()
     except Error as e:
         print(e)
