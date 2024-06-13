@@ -1,6 +1,6 @@
-from connect import create_connection, database
-from fakeData import generate_fake_data
-from sql_query import insert_data
+from src.connect import create_connection, database
+from src.modules.fakeData import generate_fake_data
+from src.modules.sql_query import insert_data
 
 SQL_USER = "INSERT INTO users(fullname,email) VALUES(?,?);"
 SQL_STATUS = "INSERT INTO status(name) VALUES(?);"

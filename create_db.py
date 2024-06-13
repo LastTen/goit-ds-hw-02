@@ -1,5 +1,5 @@
-from connect import create_connection, database
-from sql_query import create_table
+from src.connect import create_connection, database
+from src.modules.sql_query import create_table
 
 
 def create_db():

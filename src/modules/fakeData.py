@@ -2,7 +2,7 @@ import faker
 from random import randint
 
 
-def generate_fake_data(number_users=1, number_task=1, number_status=1) -> tuple():
+def generate_fake_data(number_users=1, number_task=1, number_status=1) -> tuple:
     fake_users = []
     fake_tasks = []
 
