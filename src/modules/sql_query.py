@@ -1,4 +1,5 @@
 from sqlite3 import Error
+from src.connect import create_connection, database
 
 
 def create_table(conn, create_table_sql):
@@ -22,7 +23,13 @@ def insert_data(conn, sql, data):
         conn.commit()
     except Error as e:
         print(e)
-    finally:
-        cur.close()
 
     return "ok"
+
+
+def execute_query(sql, params=[]):
+    with create_connection(database) as con:
+        cur = con.cursor()
+        cur.execute(sql, params)
+
+        return cur.fetchall()

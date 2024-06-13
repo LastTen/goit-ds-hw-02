@@ -11,8 +11,9 @@ users, tasks = generate_fake_data(5, 25, len(status))
 
 
 with create_connection(database) as conn:
-    insert_data(conn, SQL_STATUS, status)
-    insert_data(conn, SQL_USER, users)
-    insert_data(conn, SQL_TASK, tasks)
+    if conn is not None:
+        insert_data(conn, SQL_STATUS, status)
+        insert_data(conn, SQL_USER, users)
+        insert_data(conn, SQL_TASK, tasks)
 
     print("all data is filled in")
