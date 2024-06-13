@@ -8,7 +8,7 @@ def create_user(conn, project):
     """
     cur = conn.cursor()
     try:
-        cur.execute(sql, project)
+        cur.executemany(sql, project)
         conn.commit()
     except Error as e:
         print(e)
@@ -24,7 +24,7 @@ def create_status(conn, task):
     """
     cur = conn.cursor()
     try:
-        cur.execute(sql, task)
+        cur.executemany(sql, task)
         conn.commit()
     except Error as e:
         print(e)
@@ -40,7 +40,7 @@ def create_task(conn, task):
     """
     cur = conn.cursor()
     try:
-        cur.execute(sql, task)
+        cur.executemany(sql, task)
         conn.commit()
     except Error as e:
         print(e)
@@ -53,34 +53,24 @@ def create_task(conn, task):
 if __name__ == "__main__":
     with create_connection(database) as conn:
         # Statuses
-        status_new = ("new",)
-        status_progress = ("in progress",)
-        status_completed = ("completed",)
-        # create status
-        create_status(conn, status_new)
-        create_status(conn, status_progress)
-        create_status(conn, status_completed)
-
+        status = [("new",), ("in progress",), ("completed",)]
+        create_status(conn, status)
         # Users
-        user1 = ("John Smit", "smith@gmail.com")
-        user2 = ("John Brown", "brown@gmail.com")
-        user3 = ("John Black", "black@gmail.com")
-        # create users
-        create_user(conn, user1)
-        create_user(conn, user2)
-        create_user(conn, user3)
-
+        users = [
+            ("John Smit", "smith@gmail.com"),
+            ("John Brown", "brown@gmail.com"),
+            ("John Black", "black@gmail.com"),
+        ]
         # Task
-        task_1 = ("test1", "some desc", 1, 1)
-        task_2 = ("test2", "some desc", 2, 3)
-        task_3 = ("test3", "some desc", 2, 2)
-        task_4 = ("test4", "some desc", 3, 1)
-        task_5 = ("test5", "some desc", 1, 2)
-        # create task
-        create_task(conn, task_1)
-        create_task(conn, task_2)
-        create_task(conn, task_3)
-        create_task(conn, task_4)
-        create_task(conn, task_5)
+        task = (
+            ("test1", "some desc", 1, 1),
+            ("test2", "some desc", 2, 3),
+            ("test3", "some desc", 2, 2),
+            ("test4", "some desc", 3, 1),
+            ("test5", "some desc", 1, 2),
+        )
+        create_status(conn, status)
+        create_user(conn, users)
+        create_task(conn, task)
 
         print("all complete")
