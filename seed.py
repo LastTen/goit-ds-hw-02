@@ -1,4 +1,3 @@
-from src.connect import create_connection, database
 from src.modules.fakeData import generate_fake_data
 from src.modules.sql_query import insert_data
 

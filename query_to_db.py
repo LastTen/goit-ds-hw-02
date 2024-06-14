@@ -1,4 +1,4 @@
-from src.modules.sql_query import execute_query, insert_data
+from src.modules.sql_query import get_info_from_db, insert_data, delete_info_from_db
 
 
 def get_all_user_task(id):
@@ -8,7 +8,7 @@ def get_all_user_task(id):
         WHERE t.user_id = ?
         """
 
-    return execute_query(sql, [str(id)])
+    return get_info_from_db(sql, [str(id)])
 
 
 def get_all_task_by_status(status):
@@ -17,7 +17,7 @@ def get_all_task_by_status(status):
         join status s on s.id = t.status_id
         WHERE s.name = ?
         """
-    return execute_query(sql, [status])
+    return get_info_from_db(sql, [status])
 
 
 # def update_task_status(status, task_id):
@@ -26,7 +26,7 @@ def get_all_task_by_status(status):
 #         SET status_id = (SELECT s.id FROM status as s WHERE s.name = ?)
 #         WHERE t.id = ?
 #         """
-#     execute_query(sql, [status, str(task_id)])
+#     get_info_from_db(sql, [status, str(task_id)])
 #     return f"status task with id {task_id} updated to {status}"
 
 
@@ -35,7 +35,7 @@ def add_task(title, deck, user_id):
         INSERT INTO tasks(title, description, status_id, user_id)
         VALUES(?, ?, 1, ?)
         """
-    insert_data(sql, [(title, deck, str(user_id))])
+    return insert_data(sql, [(title, deck, str(user_id))])
 
 
 def get_user_wo_task():
@@ -43,7 +43,7 @@ def get_user_wo_task():
         SELECT u.fullname, u.email FROM users as u
         WHERE u.id NOT IN (SELECT t.user_id FROM tasks as t)
         """
-    return execute_query(sql)
+    return get_info_from_db(sql)
 
 
 def get_no_complete_task():
@@ -51,13 +51,15 @@ def get_no_complete_task():
         SELECT t.title, t.description FROM tasks t
         where t.status_id IS NOT 3
         """
-    return execute_query(sql)
+    return get_info_from_db(sql)
 
 
-# sql = """
-#     DELETE FROM tasks
-#     where id = ?
-#     """
+def delete_task(task_id):
+    sql = """
+        DELETE FROM tasks
+        where id = ?
+        """
+    return delete_info_from_db(sql, str(task_id))
 
 
 def get_user_with_email(email):
@@ -65,7 +67,7 @@ def get_user_with_email(email):
         SELECT u.fullname, u.email FROM users u
         WHERE u.email LIKE ?
         """
-    return execute_query(sql, [f"%{email}%"])
+    return get_info_from_db(sql, [f"%{email}%"])
 
 
 # def update_user_name(new_fullname, id):
@@ -74,7 +76,7 @@ def get_user_with_email(email):
 #         SET fullname = ?
 #         WHERE id = ?
 #     """
-#     execute_query(sql, [f"'{new_fullname}'", str(id)])
+#     get_info_from_db(sql, [f"'{new_fullname}'", str(id)])
 
 
 def get_count_task_each_status():
@@ -83,7 +85,7 @@ def get_count_task_each_status():
         JOIN status as s ON s.id = t.status_id
         GROUP BY t.status_id
         """
-    return execute_query(sql)
+    return get_info_from_db(sql)
 
 
 def get_tasks_by_user_email_domain(domain):
@@ -93,7 +95,7 @@ def get_tasks_by_user_email_domain(domain):
         JOIN users u on u.id = t.user_id
         WHERE u.email LIKE ?
         """
-    return execute_query(sql, [f"%@{domain}"])
+    return get_info_from_db(sql, [f"%@{domain}"])
 
 
 def get_tasks_wo_description():
@@ -101,7 +103,7 @@ def get_tasks_wo_description():
         SELECT t.title FROM tasks t
         WHERE t.description ISNULL
         """
-    return execute_query(sql)
+    return get_info_from_db(sql)
 
 
 def get_tasks_in_progress():
@@ -110,7 +112,7 @@ def get_tasks_in_progress():
         JOIN tasks t ON t.user_id = u.id
         JOIN status s ON s.id = t.status_id AND s.name = 'in progress'
         """
-    return execute_query(sql)
+    return get_info_from_db(sql)
 
 
 def get_count_task_for_each_user():
@@ -119,7 +121,7 @@ def get_count_task_for_each_user():
         LEFT JOIN tasks t ON t.user_id = u.id
         GROUP BY u.id
         """
-    return execute_query(sql)
+    return get_info_from_db(sql)
 
 
 if __name__ == "__main__":
@@ -135,4 +137,5 @@ if __name__ == "__main__":
     # print(get_tasks_in_progress())
     # print(get_count_task_for_each_user())
 
-    add_task("new_task1", "bdb", 1)
+    # print(add_task("new_task1", "bdb", 1))
+    print(delete_task(3))
