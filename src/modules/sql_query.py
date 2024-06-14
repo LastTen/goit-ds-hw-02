@@ -16,20 +16,27 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def insert_data(conn, sql, data):
-    cur = conn.cursor()
-    try:
-        cur.executemany(sql, data)
-        conn.commit()
-    except Error as e:
-        print(e)
+def insert_data(sql, data):
+    with create_connection(database) as conn:
+        if conn is not None:
+            cur = conn.cursor()
+            try:
+                cur.executemany(sql, data)
+                conn.commit()
+            except Error as e:
+                print(e)
 
-    return "ok"
+            return "ok"
+        else:
+            print("Error! cannot create the database connection.")
 
 
 def execute_query(sql, params=[]):
     with create_connection(database) as con:
-        cur = con.cursor()
-        cur.execute(sql, params)
+        if con is not None:
+            cur = con.cursor()
+            cur.execute(sql, params)
 
-        return cur.fetchall()
+            return cur.fetchall()
+        else:
+            print("Error! cannot create the database connection.")

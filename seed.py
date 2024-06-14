@@ -10,10 +10,8 @@ status = [("new",), ("in progress",), ("completed",)]
 users, tasks = generate_fake_data(5, 25, len(status))
 
 
-with create_connection(database) as conn:
-    if conn is not None:
-        insert_data(conn, SQL_STATUS, status)
-        insert_data(conn, SQL_USER, users)
-        insert_data(conn, SQL_TASK, tasks)
+insert_data(SQL_STATUS, status)
+insert_data(SQL_USER, users)
+insert_data(SQL_TASK, tasks)
 
-    print("all data is filled in")
+print("all data is filled in")

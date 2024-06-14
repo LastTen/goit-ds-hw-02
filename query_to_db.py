@@ -1,4 +1,4 @@
-from src.modules.sql_query import execute_query
+from src.modules.sql_query import execute_query, insert_data
 
 
 def get_all_user_task(id):
@@ -30,10 +30,12 @@ def get_all_task_by_status(status):
 #     return f"status task with id {task_id} updated to {status}"
 
 
-# sql = """
-#     INSERT INTO tasks(title, description, status_id, user_id)
-#     VALUES(?, ?, 1, ?)
-#     """
+def add_task(title, deck, user_id):
+    sql = """
+        INSERT INTO tasks(title, description, status_id, user_id)
+        VALUES(?, ?, 1, ?)
+        """
+    insert_data(sql, [(title, deck, str(user_id))])
 
 
 def get_user_wo_task():
@@ -131,4 +133,6 @@ if __name__ == "__main__":
     # print(get_tasks_by_user_email_domain("example.net"))
     # print(get_tasks_wo_description())
     # print(get_tasks_in_progress())
-    print(get_count_task_for_each_user())
+    # print(get_count_task_for_each_user())
+
+    add_task("new_task1", "bdb", 1)
