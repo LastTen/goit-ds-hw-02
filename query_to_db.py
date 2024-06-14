@@ -15,7 +15,6 @@ def get_all_user_task(id):
 
     return get_info_from_db(sql, [str(id)])
 
-
 def get_all_task_by_status(status):
     sql = """
         SELECT title, description FROM tasks as t
@@ -23,7 +22,6 @@ def get_all_task_by_status(status):
         WHERE s.name = ?
         """
     return get_info_from_db(sql, [status])
-
 
 def update_task_status(status, task_id):
     sql = """
@@ -34,6 +32,12 @@ def update_task_status(status, task_id):
     update_data_from_db(sql, [(status, str(task_id))])
     return f"status task with id {task_id} updated to {status}"
 
+def get_user_wo_task():
+    sql = """
+        SELECT u.fullname, u.email FROM users as u
+        WHERE u.id NOT IN (SELECT t.user_id FROM tasks as t)
+        """
+    return get_info_from_db(sql)
 
 def add_task(title, deck, user_id):
     sql = """
@@ -42,22 +46,12 @@ def add_task(title, deck, user_id):
         """
     return insert_data(sql, [(title, deck, str(user_id))])
 
-
-def get_user_wo_task():
-    sql = """
-        SELECT u.fullname, u.email FROM users as u
-        WHERE u.id NOT IN (SELECT t.user_id FROM tasks as t)
-        """
-    return get_info_from_db(sql)
-
-
 def get_no_complete_task():
     sql = """
         SELECT t.title, t.description FROM tasks t
         where t.status_id IS NOT 3
         """
     return get_info_from_db(sql)
-
 
 def delete_task(task_id):
     sql = """
@@ -66,14 +60,12 @@ def delete_task(task_id):
         """
     return delete_info_from_db(sql, str(task_id))
 
-
 def get_user_with_email(email):
     sql = """
         SELECT u.fullname, u.email FROM users u
         WHERE u.email LIKE ?
         """
     return get_info_from_db(sql, [f"%{email}%"])
-
 
 def update_user_name(new_fullname, id):
     sql = """
@@ -83,7 +75,6 @@ def update_user_name(new_fullname, id):
     """
     return update_data_from_db(sql, [(new_fullname, str(id))])
 
-
 def get_count_task_each_status():
     sql = """
         SELECT s.name as status, COUNT(t.id) as count_task FROM tasks as t
@@ -91,7 +82,6 @@ def get_count_task_each_status():
         GROUP BY t.status_id
         """
     return get_info_from_db(sql)
-
 
 def get_tasks_by_user_email_domain(domain):
     sql = """
@@ -102,14 +92,12 @@ def get_tasks_by_user_email_domain(domain):
         """
     return get_info_from_db(sql, [f"%@{domain}"])
 
-
 def get_tasks_wo_description():
     sql = """
         SELECT t.title FROM tasks t
         WHERE t.description ISNULL
         """
     return get_info_from_db(sql)
-
 
 def get_tasks_in_progress():
     sql = """
@@ -118,7 +106,6 @@ def get_tasks_in_progress():
         JOIN status s ON s.id = t.status_id AND s.name = 'in progress'
         """
     return get_info_from_db(sql)
-
 
 def get_count_task_for_each_user():
     sql = """
@@ -132,17 +119,20 @@ def get_count_task_for_each_user():
 if __name__ == "__main__":
     # print(get_all_user_task(1))
     # print(get_all_task_by_status("new"))
-    # print(update_task_status("new", 2))
+    # print(update_task_status("new", 5))
     # print(get_user_wo_task())
+    # print(add_task("new_task1", "bdb", 1))
     # print(get_no_complete_task())
+    # print(delete_task(3))
     # print(get_user_with_email("77"))
+    # print(update_user_name("doo", 2))
     # print(get_count_task_each_status())
     # print(get_tasks_by_user_email_domain("example.net"))
     # print(get_tasks_wo_description())
     # print(get_tasks_in_progress())
     # print(get_count_task_for_each_user())
 
-    # print(add_task("new_task1", "bdb", 1))
-    # print(delete_task(3))
-    # print(update_user_name("doo", 2))
-    print(update_task_status("new", 5))
+    
+    
+    
+    
