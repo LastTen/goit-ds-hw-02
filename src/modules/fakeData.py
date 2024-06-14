@@ -2,7 +2,25 @@ import faker
 from random import randint
 
 
-def generate_fake_data(number_users=1, number_task=1, number_status=1) -> tuple:
+def generate_fake_data(
+    number_users: int = 1, number_task: int = 1, number_status: int = 1
+) -> tuple:
+    """
+    This function generates fake user data and task data.
+
+    Parameters:
+    number_users (int): The number of fake users to generate. Default is 1.
+    number_task (int): The number of fake tasks to generate. Default is 1.
+    number_status (int): The number of fake statuses to generate. Default is 1.
+
+    Returns:
+    tuple: A tuple containing two lists. The first list contains tuples of fake user data (name, email).
+           The second list contains tuples of fake task data (task_title, task_description, status, user_id).
+
+    Example:
+    >>> user, task = generate_fake_data(5, 20, 3)
+    >>> print(user, task, sep="\n")
+    """
     fake_users = []
     fake_tasks = []
 

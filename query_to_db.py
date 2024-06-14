@@ -7,6 +7,7 @@ from src.modules.sql_query import (
 
 
 def get_all_user_task(id):
+    """Returns all user tasks for a given user id"""
     sql = """
         SELECT title, description, s.name as status FROM tasks as t
         join status s on s.id = t.status_id
@@ -15,7 +16,9 @@ def get_all_user_task(id):
 
     return get_info_from_db(sql, [str(id)])
 
+
 def get_all_task_by_status(status):
+    """Returns all tasks for a given status"""
     sql = """
         SELECT title, description FROM tasks as t
         join status s on s.id = t.status_id
@@ -23,7 +26,9 @@ def get_all_task_by_status(status):
         """
     return get_info_from_db(sql, [status])
 
+
 def update_task_status(status, task_id):
+    """Update task status"""
     sql = """
         UPDATE tasks as t
         SET status_id = (SELECT s.id FROM status as s WHERE s.name = ?)
@@ -32,42 +37,54 @@ def update_task_status(status, task_id):
     update_data_from_db(sql, [(status, str(task_id))])
     return f"status task with id {task_id} updated to {status}"
 
+
 def get_user_wo_task():
+    """Returns all users with no tasks"""
     sql = """
         SELECT u.fullname, u.email FROM users as u
         WHERE u.id NOT IN (SELECT t.user_id FROM tasks as t)
         """
     return get_info_from_db(sql)
 
+
 def add_task(title, deck, user_id):
+    """Add new task to table tasks"""
     sql = """
         INSERT INTO tasks(title, description, status_id, user_id)
         VALUES(?, ?, 1, ?)
         """
     return insert_data(sql, [(title, deck, str(user_id))])
 
+
 def get_no_complete_task():
+    """Returns all not completed tasks"""
     sql = """
         SELECT t.title, t.description FROM tasks t
         where t.status_id IS NOT 3
         """
     return get_info_from_db(sql)
 
+
 def delete_task(task_id):
+    """Delete task from table tasks"""
     sql = """
         DELETE FROM tasks
         where id = ?
         """
     return delete_info_from_db(sql, str(task_id))
 
+
 def get_user_with_email(email):
+    """Get user with email from database"""
     sql = """
         SELECT u.fullname, u.email FROM users u
         WHERE u.email LIKE ?
         """
     return get_info_from_db(sql, [f"%{email}%"])
 
+
 def update_user_name(new_fullname, id):
+    """Update user name in table users"""
     sql = """
         UPDATE users
         SET fullname = ?
@@ -75,7 +92,9 @@ def update_user_name(new_fullname, id):
     """
     return update_data_from_db(sql, [(new_fullname, str(id))])
 
+
 def get_count_task_each_status():
+    """Returns count of tasks for each status"""
     sql = """
         SELECT s.name as status, COUNT(t.id) as count_task FROM tasks as t
         JOIN status as s ON s.id = t.status_id
@@ -83,7 +102,9 @@ def get_count_task_each_status():
         """
     return get_info_from_db(sql)
 
+
 def get_tasks_by_user_email_domain(domain):
+    """Returns all tasks for a given user email domain"""
     sql = """
         SELECT title, description, s.name as status FROM tasks as t
         JOIN status s on s.id = t.status_id
@@ -92,14 +113,18 @@ def get_tasks_by_user_email_domain(domain):
         """
     return get_info_from_db(sql, [f"%@{domain}"])
 
+
 def get_tasks_wo_description():
+    """Returns all tasks were description is null"""
     sql = """
         SELECT t.title FROM tasks t
         WHERE t.description ISNULL
         """
     return get_info_from_db(sql)
 
+
 def get_tasks_in_progress():
+    """Returns all tasks in progress"""
     sql = """
         SELECT u.fullname, t.title, t.description FROM users u
         JOIN tasks t ON t.user_id = u.id
@@ -107,7 +132,9 @@ def get_tasks_in_progress():
         """
     return get_info_from_db(sql)
 
+
 def get_count_task_for_each_user():
+    """Returns count of tasks for each user"""
     sql = """
         SELECT u.fullname as user, COUNT(t.id) as count_task FROM users as u
         LEFT JOIN tasks t ON t.user_id = u.id
@@ -117,22 +144,17 @@ def get_count_task_for_each_user():
 
 
 if __name__ == "__main__":
-    # print(get_all_user_task(1))
-    # print(get_all_task_by_status("new"))
-    # print(update_task_status("new", 5))
-    # print(get_user_wo_task())
-    # print(add_task("new_task1", "bdb", 1))
-    # print(get_no_complete_task())
-    # print(delete_task(3))
-    # print(get_user_with_email("77"))
-    # print(update_user_name("doo", 2))
-    # print(get_count_task_each_status())
-    # print(get_tasks_by_user_email_domain("example.net"))
-    # print(get_tasks_wo_description())
-    # print(get_tasks_in_progress())
-    # print(get_count_task_for_each_user())
-
-    
-    
-    
-    
+    print(get_all_user_task(1))
+    print(get_all_task_by_status("new"))
+    print(update_task_status("new", 5))
+    print(get_user_wo_task())
+    print(add_task("new_task1", "bdb", 1))
+    print(get_no_complete_task())
+    print(delete_task(3))
+    print(get_user_with_email("77"))
+    print(update_user_name("doo", 2))
+    print(get_count_task_each_status())
+    print(get_tasks_by_user_email_domain("example.net"))
+    print(get_tasks_wo_description())
+    print(get_tasks_in_progress())
+    print(get_count_task_for_each_user())
