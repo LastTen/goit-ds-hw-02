@@ -53,3 +53,17 @@ def delete_info_from_db(sql, data):
                 print(e)
         else:
             print("Error!")
+
+
+def update_data_from_db(sql, data):
+    with create_connection(database) as conn:
+        if conn is not None:
+            cur = conn.cursor()
+            try:
+                cur.executemany(sql, data)
+                conn.commit()
+                return "updated successfully"
+            except Error as e:
+                print(e)
+        else:
+            print("Error!")
